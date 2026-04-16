@@ -37,6 +37,10 @@ ameba_add_subdirectory(${c_CMPT_PMC_DIR})
 
 ameba_add_subdirectory(${c_MCU_PROJECT_DIR}/src)
 
+ameba_add_subdirectory_if(CONFIG_MATTER_EN
+    ${c_CMPT_MATTER_DIR}/project/cmake lib_matter
+)
+
 # TODO: need to catch the error
 add_custom_target(atf ALL
     COMMAND ${CMAKE_COMMAND} -E echo "Building atf project"
@@ -49,6 +53,8 @@ set_target_properties(atf PROPERTIES
     ADDITIONAL_CLEAN_FILES
         ${CMAKE_BINARY_DIR}/project_ap/asdk/make/atf
 )
+
+ameba_target_depend_if(CONFIG_MATTER_SECURE_EN atf matter_atf_secure)
 
 ameba_target_depend(${c_CURRENT_IMAGE} atf)
 
